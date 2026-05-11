@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    /* Use native smooth scroll on mobile, CSS smooth on desktop */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #FFFCFA;
+    color: #1a1a2e;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  ::selection {
+    background: rgba(255, 45, 94, 0.15);
+    color: #C80D3E;
+  }
+
+  /* Hide scrollbar on mobile for cleaner look */
+  @media (max-width: 767px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 45, 94, 0.2);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 45, 94, 0.4);
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Glassmorphism — use backdrop-filter only on desktop.
+   * On mobile, use higher-opacity solid backgrounds for performance.
+   * backdrop-filter is the #1 cause of scroll jank on mobile.
+   */
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+  }
+  .glass-pink {
+    background: rgba(255, 240, 243, 0.8);
+    border: 1px solid rgba(255, 224, 232, 0.6);
+  }
+
+  /* Desktop: enable blur backdrop */
+  @media (min-width: 768px) {
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .glass-strong {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .glass-pink {
+      background: rgba(255, 240, 243, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #FF2D5E 0%, #FF5C85 50%, #ED1149 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-warm {
+    background: linear-gradient(135deg, #FF2D5E 0%, #FF8FA3 40%, #FFB3C6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .berry-glow {
+    box-shadow: 0 0 30px rgba(255, 45, 94, 0.12),
+                0 0 60px rgba(255, 45, 94, 0.06);
+  }
+
+  .berry-glow-strong {
+    box-shadow: 0 0 30px rgba(255, 45, 94, 0.2),
+                0 0 60px rgba(255, 45, 94, 0.1);
+  }
+
+  /* Noise overlay — desktop only, removed on mobile for perf */
+  .noise-overlay {
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .noise-overlay::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  .magnetic-btn {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* GPU acceleration hint for animated elements */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4D6D"/>
+      <stop offset="100%" stop-color="#C9184A"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 4 C12 1 8 3 10 7 C9 5 6 2 5 6 C4 9 8 10 16 9" fill="#4ADE80"/>
+  <path d="M16 4 C20 1 24 3 22 7 C23 5 26 2 27 6 C28 9 24 10 16 9" fill="#22C55E"/>
+  <ellipse cx="16" cy="19" rx="11" ry="12" fill="url(#g)"/>
+  <ellipse cx="13" cy="16" rx="3" ry="4" fill="rgba(255,255,255,0.2)"/>
+</svg>
