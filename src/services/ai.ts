@@ -1,11 +1,9 @@
-import type { Message } from '../types/chat';
-
-// ─── Main API call ───────────────────────────────────────
+import type { Attachment, Message } from '../types/chat';
 
 export async function sendToAI(
   userMessage: string,
   chatHistory: Message[],
-  attachments?: import('../types/chat').Attachment[]
+  attachments?: Attachment[]
 ): Promise<string> {
   const response = await fetch('/api/chat', {
     method: 'POST',
@@ -33,27 +31,25 @@ export async function sendToAI(
   return data.text;
 }
 
-// ─── Error formatting ────────────────────────────────────
-
 export function formatAIError(error: unknown): string {
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
 
     if (msg.includes('token') || msg.includes('api key') || msg.includes('not configured')) {
-      return "Hmm, I can't connect right now — my API key might not be set up. Please check the `.env` file. 🔧";
+      return "I can't connect to the AI backend right now. Restart the server after updating `.env`, or set `HF_TOKEN` in Vercel.";
     }
     if (msg.includes('quota') || msg.includes('rate') || msg.includes('429')) {
-      return "I'm getting a lot of questions right now! 😅 Please wait a moment and try again.";
+      return "I'm getting a lot of questions right now. Please wait a moment and try again.";
     }
     if (msg.includes('network') || msg.includes('fetch') || msg.includes('failed')) {
-      return "Looks like there's a network issue. Check your internet connection or make sure the backend is running. 🌐";
+      return 'Looks like there is a network issue. Check your internet connection or make sure the backend is running.';
     }
     if (msg.includes('blocked') || msg.includes('safety')) {
-      return "I wasn't able to respond to that one — it may have triggered a safety filter. Try rephrasing your question! 🛡️";
+      return "I wasn't able to respond to that one. Try rephrasing your question.";
     }
 
-    return `Oops, something went wrong: ${error.message} 😔`;
+    return `Oops, something went wrong: ${error.message}`;
   }
 
-  return "Something unexpected happened. Please try again! 🍓";
+  return 'Something unexpected happened. Please try again.';
 }
