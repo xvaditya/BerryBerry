@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Dev proxy — mirrors the Vercel serverless function locally
+      '/api/chat': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      // Dev proxy mirrors the Vercel serverless function locally.
       '/api/hf': {
         target: 'https://api-inference.huggingface.co',
         changeOrigin: true,
