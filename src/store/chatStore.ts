@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Chat, Message, Attachment } from '../types/chat';
-import { sendToGemini, formatGeminiError } from '../services/gemini';
+import { sendToAI, formatAIError } from '../services/ai';
 import imageCompression from 'browser-image-compression';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
@@ -272,14 +272,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     );
 
     try {
-      // Call Gemini API
-      // Note: If using public URLs, Gemini API handles them via files or inlineData if base64. 
-      // If we replaced base64 with public URLs, we need to pass them differently.
-      // Wait, Gemini Flash accepts inline base64 or File API. Let's assume we pass the local base64 we created earlier to Gemini?
-      // Actually, since we updated att.data to be a URL, Gemini SDK won't like it in inlineData (it expects base64).
-      // Let's refetch it as base64 for Gemini just in case, or we should have kept the base64!
-      // For now, let's just pass the original files or rely on text if images fail.
-      const aiText = await sendToGemini(content, chatHistory, userMsg.attachments);
+      const aiText = await sendToAI(content, chatHistory, userMsg.attachments);
 
       // Insert AI response
       const { data: aiMsgData, error: aiErr } = await supabase.from('messages').insert([{
@@ -311,7 +304,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         id: uid(),
         chatId: targetChatId!,
         role: 'assistant',
-        content: formatGeminiError(error),
+        content: formatAIError(error),
         createdAt: Date.now(),
       };
 

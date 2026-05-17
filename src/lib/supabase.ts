@@ -1,7 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const fallbackSupabaseUrl = 'https://hxtoxawafdboijkaaxhq.supabase.co';
+const fallbackSupabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4dG94YXdhZmRib2lqa2FheGhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMDc0NjQsImV4cCI6MjA5NDU4MzQ2NH0.4eexDd7hhj53yvPTH80tMUlCkgYgizbN9Kv6UrU4wTg';
+
+const supabaseUrl =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) || fallbackSupabaseUrl;
+const supabaseAnonKey =
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || fallbackSupabaseAnonKey;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
@@ -9,9 +15,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-// We provide dummy values so the client doesn't crash immediately, 
-// but requests will fail if real keys aren't provided.
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder'
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

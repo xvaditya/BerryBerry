@@ -2,7 +2,7 @@ import type { Message } from '../types/chat';
 
 // ─── Main API call ───────────────────────────────────────
 
-export async function sendToGemini(
+export async function sendToAI(
   userMessage: string,
   chatHistory: Message[],
   attachments?: import('../types/chat').Attachment[]
@@ -13,6 +13,7 @@ export async function sendToGemini(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      message: userMessage,
       prompt: userMessage,
       history: chatHistory,
       attachments,
@@ -34,11 +35,11 @@ export async function sendToGemini(
 
 // ─── Error formatting ────────────────────────────────────
 
-export function formatGeminiError(error: unknown): string {
+export function formatAIError(error: unknown): string {
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
 
-    if (msg.includes('api key') || msg.includes('not configured')) {
+    if (msg.includes('token') || msg.includes('api key') || msg.includes('not configured')) {
       return "Hmm, I can't connect right now — my API key might not be set up. Please check the `.env` file. 🔧";
     }
     if (msg.includes('quota') || msg.includes('rate') || msg.includes('429')) {
